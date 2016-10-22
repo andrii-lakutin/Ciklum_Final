@@ -1,0 +1,12 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'reset.scss';
+
+body{
+	font-family: 'Roboto',sans-serif;
+	font-size: 16px;
+}
+
+/* display:flex override this without important*/
+[hidden] {
+  display: none !important;
+}

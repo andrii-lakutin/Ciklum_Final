@@ -1,0 +1,18 @@
+<header>
+	<div class="search">
+		<input type="text">	
+		<i class="fa fa-search" aria-hidden="true"></i>
+	</div>
+	<label><input type="checkbox" name="Without seat" [(ngModel)]="withoutSeatCheckbox">Without seat</label>
+	<div *ngIf="isLogin" class="newSeat">New seat</div>
+	<div [hidden]="isLogin" (click)="toggleLoginPopUpVisibility()" class="login">LOGIN</div>
+	<div *ngIf="isLogin" (click)="logout()" class="logout">LOGOUT</div>
+	<div [hidden]="!popUpVisible" class="loginPopUp">
+		<div class="inputs">
+			<div class="row"><p>Login</p><input type="text" [(ngModel)]="inputName" required #name></div>
+			<div class="row"><p>Password</p><input type="password" [(ngModel)]="inputPass" required #pass></div>
+			<i class="fa fa-times cross" aria-hidden="true" (click)="toggleLoginPopUpVisibility()"></i>
+		</div>
+		<a (click)="login(name.value, pass.value)" class="popUpLogin">Login</a>
+	</div>
+</header>
