@@ -1,4 +1,4 @@
-@import '../shared/variables.scss';
+@import '../shared/popUpStyles.scss';
 
 header{
 	width: 100%;
@@ -43,55 +43,30 @@ header{
 		margin: 0 2%; 
 		cursor: pointer
 	}
-	.loginPopUp{
-		position: absolute;
-		display: flex;
-		flex-direction: column;
-		top: 70px;
-		right: 60px; 
-		width: 400px;
-		height: 200px;  
-		background: $header-bg-color;
-		.inputs{
-			background: $bg-inside-popup;
-			position: relative;
-			width: 97%;
-			height: 80%;
-			margin: 1.5% auto; 
-			display: flex; 
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-			.row{
-				color: $header-bg-color;
-				display: flex;
-				width: 70%; 
-				justify-content: space-between;
-				align-items: center;
-				margin-top: 10px; 
-				input{
-					@include inputs();
-					padding-left: 5px; 
-					border: 1px solid $header-bg-color;
-				}
-			} 
-			.cross{
-				position: absolute;
-				top: 0px;
-				right: 0px;
-				background: $header-bg-color;  
-				padding: 0 8px 2px 3px; 
-				cursor: pointer;
-			}
-		}
-		.popUpLogin{
-			align-self: flex-end; 
-			margin-right: 3%; 
-			cursor: pointer;
-		}
-	}
 	.logout{
 		margin: 0 2%;
 		cursor: pointer; 
 	}
 }
+
+//PopUp
+.inputs{
+	display: flex; 
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	.row{
+		color: $header-bg-color;
+		display: flex;
+		width: 70%; 
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 10px; 
+		input{
+			@include inputs();
+			padding-left: 5px; 
+			border: 1px solid $header-bg-color;
+		}
+	} 
+}
+

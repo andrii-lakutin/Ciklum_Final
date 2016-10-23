@@ -1,0 +1,35 @@
+@import './variables.scss';
+
+.PopUp{
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	top: 70px;
+	right: 60px; 
+	width: 400px;
+	height: 200px;  
+	background: $header-bg-color;
+	z-index: 1; 
+	.inputs{
+		background: $bg-inside-popup;
+		position: relative;
+		width: 97%;
+		height: 80%;
+		margin: 1.5% auto; 
+		.cross{
+			position: absolute;
+			top: 0px;
+			right: 0px;
+			background: $header-bg-color;  
+			padding: 0 8px 2px 3px; 
+			cursor: pointer;
+			color: darken($header-bg-color, 30%);
+		}
+	}
+	.popUpConfirm{
+		align-self: flex-end; 
+		margin-right: 3%; 
+		cursor: pointer;
+		color: white;
+	}
+}

@@ -3,6 +3,10 @@ $search-placeholder: #757575;
 $fontcolor: white;
 $bg-inside-popup: rgb(219,219,219);
 
+$seat-item: rgba(67,97,160,1);
+
+$popUp-icon-bg: #F4F3F6;
+
 @mixin inputs() {
 	border: 0;
 	&:focus{

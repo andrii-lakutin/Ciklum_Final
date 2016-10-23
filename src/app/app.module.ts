@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { ServerService } from './shared/server.service';
+import { SeatPopUpService } from './shared/seatPopUp.service';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { FloorPlanComponent } from './floor-plan/floor-plan.component';
-import { SeatItemComponent } from './seat-item/seat-item.component';
+import { SeatItemsComponent } from './seat-items/seat-items.component';
 import { SeatPopupComponent } from './seat-popup/seat-popup.component';
 import { OccupantPopupComponent } from './occupant-popup/occupant-popup.component';
 
@@ -17,7 +18,7 @@ import { OccupantPopupComponent } from './occupant-popup/occupant-popup.componen
     AppComponent,
     HeaderComponent,
     FloorPlanComponent,
-    SeatItemComponent,
+    SeatItemsComponent,
     SeatPopupComponent,
     OccupantPopupComponent
   ],
@@ -26,7 +27,7 @@ import { OccupantPopupComponent } from './occupant-popup/occupant-popup.componen
     FormsModule,
     HttpModule
   ],
-  providers: [ServerService],
+  providers: [ServerService, SeatPopUpService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

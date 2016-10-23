@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ServerService } from '../shared/server.service';
+import { SeatPopUpService } from '../shared/seatPopUp.service';
 
 @Component({
   selector: 'app-header',
@@ -16,7 +17,8 @@ export class HeaderComponent implements OnInit {
   withoutSeatCheckbox : boolean;
   popUpVisible        : boolean;
 
-  constructor(private serverService: ServerService) {
+  constructor(private serverService: ServerService,
+              private seatPopUpService: SeatPopUpService) {
   	this.inputName = '';
   	this.inputPass = '';
   	this.withoutSeatCheckbox = false;
@@ -43,10 +45,12 @@ export class HeaderComponent implements OnInit {
   }	
 
   successLogin(){
-  	this.isLogin = true;
   	this.popUpVisible = false;
   	this.inputName = '';
   	this.inputPass = '';
+  	this.isLogin = true;
+
+  	// console.log(this) There is a bug: property is update, but ngIf do nothing(not always, just random); 
   }
 
   failureLogin(){
@@ -59,5 +63,9 @@ export class HeaderComponent implements OnInit {
 
   toggleLoginPopUpVisibility(){
   	this.popUpVisible ? this.popUpVisible = false : this.popUpVisible = true ; 
+  }
+
+  newSeat(){
+    this.seatPopUpService.changeVisibility(true);
   }
 }

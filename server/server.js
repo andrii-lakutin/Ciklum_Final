@@ -1,9 +1,12 @@
 import express from 'express';
-import db from './db.js';
 import http from 'http';
-import User from "./schemas/user";
 import bodyParser from 'body-parser';
 import crypto from 'crypto';
+
+import db from './db.js';
+import User from "./schemas/user";
+import Seat from "./schemas/seat";
+
 
 var app = express();
 
@@ -39,6 +42,32 @@ app.post('/login', jsonParser, function (req, res) {
     		}
     	}
     });
+});
+
+app.post('/seat', jsonParser, function (req, res) {
+
+  const method = req.body.method; // Create/Update
+  const title = req.body.title;
+  const status = req.body.status;
+  const userId = req.body.userId;
+  const x = req.body.x;
+  const y = req.body.y;
+
+  if (method === 'Create') {
+    let seat = new Seat({
+      Title : title,
+      Status: status,
+      UserId: userId,
+      X : x,
+      Y : y
+    });
+
+    seat.save(function (err, test) {
+      if (err) return console.error(err);
+    });
+
+    res.status(200).send('Saved!');
+  }
 });
 
 app.listen(3000, function () {

@@ -1,3 +1,13 @@
-<p>
-  seat-popup works!
-</p>
+<div class="PopUp" *ngIf="visible">
+	<div class="inputs">
+		<div class="icon">
+			<div class="circle">
+				<i class="fa fa-caret-down" aria-hidden="true"></i>
+			</div>
+		</div>
+		<div class="row"><p>Seat Title:</p><input type="text" ></div>
+		<div class="row"><p>Occupant:</p><input type="password" ></div>
+		<i class="fa fa-times cross" aria-hidden="true" (click)="exit()"></i>
+	</div>
+	<a class="popUpConfirm">SAVE</a>
+</div>
