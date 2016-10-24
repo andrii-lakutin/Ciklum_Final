@@ -46,12 +46,16 @@ app.post('/login', jsonParser, function (req, res) {
 
 app.post('/seat', jsonParser, function (req, res) {
 
-  const method = req.body.method; // Create/Update
-  const title = req.body.title;
-  const status = req.body.status;
-  const userId = req.body.userId;
-  const x = req.body.x;
-  const y = req.body.y;
+  console.log(req.body);
+
+  const method = req.body._method; // Create/Update
+  const title = req.body.Title;
+  const status = req.body.Status;
+  const userId = req.body.UserId;
+  const x = req.body.X;
+  const y = req.body.Y;
+
+  let seatId;
 
   if (method === 'Create') {
     let seat = new Seat({
@@ -64,10 +68,21 @@ app.post('/seat', jsonParser, function (req, res) {
 
     seat.save(function (err, test) {
       if (err) return console.error(err);
-    });
+      let seatId = test._id;
 
-    res.status(200).send('Saved!');
+      res.status(200).send(seatId);
+    });
   }
+});
+
+app.get('/getAllSeats', function(req,res){
+  Seat.find().exec(function(err, data){
+      if (err) {
+        console.log(err);
+      } else {
+        res.status(200).send(data);
+      }
+    });
 });
 
 app.listen(3000, function () {

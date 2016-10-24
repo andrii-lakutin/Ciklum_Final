@@ -9,16 +9,17 @@ import {Subject} from 'rxjs/Subject';
 
 @Injectable() 
 export class SeatPopUpService {
-  isNewSeat : boolean;
 
-  // Observable string source
+  selectedSeat: any;
+
+  // Observable source
   private visibilityDataSource = new Subject<boolean>();
 
   constructor(private http: Http) {
-    this.isNewSeat = false;
+    this.selectedSeat;
   }
 
-  // Observable string stream
+  // Observable stream
   visible$ = this.visibilityDataSource.asObservable();
 
 

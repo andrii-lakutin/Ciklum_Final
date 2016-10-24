@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ServerService } from '../shared/server.service';
 import { SeatPopUpService } from '../shared/seatPopUp.service';
+
 
 @Component({
   selector: 'app-header',
@@ -18,7 +19,8 @@ export class HeaderComponent implements OnInit {
   popUpVisible        : boolean;
 
   constructor(private serverService: ServerService,
-              private seatPopUpService: SeatPopUpService) {
+              private seatPopUpService: SeatPopUpService,
+              private ref: ChangeDetectorRef) {
   	this.inputName = '';
   	this.inputPass = '';
   	this.withoutSeatCheckbox = false;
@@ -27,7 +29,8 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(){
-
+    this.ref.detach();
+    this.ref.detectChanges();
   }
 
   login(name, pass){
@@ -49,8 +52,7 @@ export class HeaderComponent implements OnInit {
   	this.inputName = '';
   	this.inputPass = '';
   	this.isLogin = true;
-
-  	// console.log(this) There is a bug: property is update, but ngIf do nothing(not always, just random); 
+    this.ref.detectChanges();
   }
 
   failureLogin(){
@@ -59,13 +61,17 @@ export class HeaderComponent implements OnInit {
 
   logout(){
   	this.isLogin = false;
+    this.ref.detectChanges();
   }
 
   toggleLoginPopUpVisibility(){
-  	this.popUpVisible ? this.popUpVisible = false : this.popUpVisible = true ; 
+  	this.popUpVisible ? this.popUpVisible = false : this.popUpVisible = true; 
+    this.ref.detectChanges();
   }
 
   newSeat(){
+    this.serverService.createNewSeat();
     this.seatPopUpService.changeVisibility(true);
+    this.ref.detectChanges();
   }
 }

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { ServerService } from '../shared/server.service';
 
 @Component({
   selector: 'app-seat-items',
@@ -7,9 +8,28 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SeatItemsComponent implements OnInit {
 
-  constructor() { }
+  seats: any;	
+
+  constructor(private serverService: ServerService, 
+  			  private ref: ChangeDetectorRef) { 
+  	this.seats = [];
+  }
 
   ngOnInit() {
+  	this.ref.detach();
+
+    this.serverService.seats$.subscribe(
+      data => {
+        this.seats = data; 
+        this.ref.detectChanges();
+      });
+
+    this.serverService.getAllSeats();
+    this.ref.detectChanges();
+  }
+
+  choose(seat){
+  	console.log(seat);
   }
 
 }
