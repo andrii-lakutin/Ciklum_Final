@@ -1,7 +1,10 @@
 <header>
 	<div class="search">
-		<input type="text">	
+		<input type="text" (keyup)="searchEvent($event)" [(ngModel)]="search">	
 		<i class="fa fa-search" aria-hidden="true"></i>
+		<ul class="results">
+			<li *ngFor="let user of searchResult" (click)="selectUser(user)"><p>{{user.Name}}</p><p>{{user.LastName}}</p></li>
+		</ul>
 	</div>
 	<label><input type="checkbox" name="Without seat" [(ngModel)]="withoutSeatCheckbox">Without seat</label>
 	<div *ngIf="isLogin" class="newSeat" (click)="newSeat()">New seat</div>

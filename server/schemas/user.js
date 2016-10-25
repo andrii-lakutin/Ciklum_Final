@@ -1,3 +1,4 @@
+//This is schema for users, who use our app.
 import mongoose from 'mongoose';
 
 var userSchema = mongoose.Schema({

@@ -10,6 +10,7 @@ header{
 	background: $header-bg-color;  
 	color: $fontcolor;
 	.search{
+		position: relative;
 		display: flex;
 		width: 20%; 
 		input{
@@ -22,6 +23,27 @@ header{
 			border: 1px solid $fontcolor;
 			padding: 3px;
 			cursor: pointer;
+		}
+		.results{
+			position: absolute;
+			width: 100%; 
+			top: 24px;
+			left: 0; 
+			z-index: 1; 
+			li{
+				height: 35px;
+				color: black;
+				border: 1px solid $header-bg-color;
+				background: white;  
+				margin-top: 1px;
+				display: flex;
+				justify-content: flex-start;
+				line-height: 35px; 
+				cursor: pointer;
+				p{
+					margin-left: 10px; 
+				}   
+			}
 		}
 	}
 	label{

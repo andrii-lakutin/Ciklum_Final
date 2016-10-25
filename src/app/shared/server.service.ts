@@ -12,14 +12,18 @@ import {Subject} from 'rxjs/Subject';
 export class ServerService {
 
   seats: any;
+  users: any;
 
   private seatsDataSource = new Subject<any>();
+  private usersDataSource = new Subject<any>();
 
   constructor(private http: Http, private seatPopUpService: SeatPopUpService ) {
     this.seats = [];
+    this.users = [];
   }
 
   seats$ = this.seatsDataSource.asObservable();
+  users$ = this.usersDataSource.asObservable();
 
   loginUser(name,pass) {
     let data = {
@@ -52,6 +56,16 @@ export class ServerService {
       });
   }
 
+  // getAllUsers(){
+  //   this.http.get(`http://localhost:3000/getAllUsers`)
+  //     .toPromise()
+  //     .then(res => {
+  //       let arrOfUsers = JSON.parse(res["_body"]);
+  //       this.users = arrOfUsers;
+  //       console.log(this.users);
+  //     });
+  // }
+
   updateSeat(newTitle, newUser){
     let seat = this.seatPopUpService.getCurrentSeat();
     seat.Title = newTitle;
@@ -73,6 +87,22 @@ export class ServerService {
 
     return this.http.post(url, body, {headers: head})
       .toPromise()
+  }
+
+  search(searchValue){
+    this.http.get(`http://localhost:3000/search=${searchValue}`)
+      .toPromise()
+      .then(res => {
+        let arrOfUsers = JSON.parse(res["_body"]);
+        console.log(arrOfUsers);
+        this.users = arrOfUsers;
+        this.usersDataSource.next(this.users);
+      });
+  }
+
+  onEmptySearch(){
+    let empty = [];
+    this.usersDataSource.next(empty);
   }
 
 }

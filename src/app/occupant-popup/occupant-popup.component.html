@@ -1,3 +1,20 @@
-<p>
-  occupant-popup works!
-</p>
+<div class="PopUp" *ngIf="visible">
+	<div class="inputs">
+		<div class="icon">
+		</div>
+		<div class="row">
+			<p>Occupant name:</p>
+			<p>{{name + lastName}}</p>
+		</div>
+		<div class="row">
+			<p>Occupant email:</p>
+			<p>{{mail}}</p>
+		</div>
+		<div class="row">
+			<p>Occupant seat:</p>
+			<a>{{seatId}}</a>
+		</div>
+		<i class="fa fa-times cross" aria-hidden="true" (click)="exit()"></i>
+	</div>
+	<a class="popUpConfirm" >SAVE</a>
+</div>

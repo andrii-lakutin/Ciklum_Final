@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ServerService } from '../shared/server.service';
 import { SeatPopUpService } from '../shared/seatPopUp.service';
+import { OccupantPopUpService } from '../shared/occupantPopUp.service';
 
 
 @Component({
@@ -14,22 +15,35 @@ export class HeaderComponent implements OnInit {
   inputPass           : string;
   name                : string;
   pass                : string;
+  search              : string;
   isLogin             : boolean;
   withoutSeatCheckbox : boolean;
   popUpVisible        : boolean;
+  optimization        : any;
+  searchResult        : any;
 
   constructor(private serverService: ServerService,
               private seatPopUpService: SeatPopUpService,
+              private occupantPopUpService: OccupantPopUpService,
               private ref: ChangeDetectorRef) {
   	this.inputName = '';
   	this.inputPass = '';
+    this.search = '';
   	this.withoutSeatCheckbox = false;
   	this.popUpVisible = false;
   	this.isLogin = false;
+    this.optimization;
+    this.searchResult = [];
   }
 
   ngOnInit(){
     this.ref.detach();
+
+    this.serverService.users$.subscribe(
+      data => {
+        this.searchResult = data;
+        this.ref.detectChanges();
+      });
     this.ref.detectChanges();
   }
 
@@ -76,4 +90,37 @@ export class HeaderComponent implements OnInit {
     this.seatPopUpService.changeVisibility(true);
     this.ref.detectChanges();
   }
+  //search
+  searchEvent(event: KeyboardEvent) {
+    this.search = (<HTMLInputElement>event.target).value;
+    if(this.search) {
+      this.optimize();
+    } else{
+      this.serverService.onEmptySearch();
+    }
+  }
+  optimize(){
+    if (this.optimization) {
+        // clear the timeout, if one is pending
+        clearTimeout(this.optimization);
+        this.optimization = null;
+    }
+
+    let trueContext = this.goToServer.bind(this);
+
+    this.optimization = setTimeout(trueContext, 300);
+  }
+
+  goToServer(){
+    this.serverService.search(this.search);
+  }
+
+  selectUser(user){
+    this.occupantPopUpService.setCurrent(user);
+    this.occupantPopUpService.changeVisibility(true);
+    this.search = '';
+    this.searchResult = [];
+    this.ref.detectChanges();
+  }
+
 }

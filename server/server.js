@@ -5,6 +5,7 @@ import crypto from 'crypto';
 
 import db from './db.js';
 import User from "./schemas/user";
+import PotentialOccupant from "./schemas/users";
 import Seat from "./schemas/seat";
 
 
@@ -102,6 +103,34 @@ app.get('/getAllSeats', function(req,res){
         res.status(200).send(data);
       }
     });
+});
+
+// app.post('/createUser', jsonParser, function(req,res){
+//   let potentialOccupant = new PotentialOccupant({
+//     Name    : req.body.Name,
+//     LastName: req.body.LastName,
+//     Mail    : req.body.Mail,
+//     SeatId  : req.body.SeatId
+//   });
+
+//   potentialOccupant.save(function (err, test) {
+//     if (err) return console.error(err);
+
+//     res.status(200).send('Added!');
+//   });
+// });
+
+app.get('/search=:searchValue', function(req,res){
+  let search = req.params.searchValue;
+  console.log(req.params.searchValue);
+  let re = new RegExp(search, 'i');
+  PotentialOccupant.find({ $or: [ { Name: re }, { LastName: re } , { Mail : re} ] }).exec(function(err,data){
+      if (err) {
+        console.log(err);
+      } else {
+        res.status(200).send(data);
+      }
+  });
 });
 
 app.listen(3000, function () {

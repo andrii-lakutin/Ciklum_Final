@@ -5,6 +5,7 @@ import { HttpModule } from '@angular/http';
 
 import { ServerService } from './shared/server.service';
 import { SeatPopUpService } from './shared/seatPopUp.service';
+import { OccupantPopUpService } from './shared/occupantPopUp.service';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -27,7 +28,7 @@ import { OccupantPopupComponent } from './occupant-popup/occupant-popup.componen
     FormsModule,
     HttpModule
   ],
-  providers: [ServerService, SeatPopUpService],
+  providers: [ServerService, SeatPopUpService, OccupantPopUpService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
