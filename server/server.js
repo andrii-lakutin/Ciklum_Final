@@ -51,11 +51,11 @@ app.post('/seat', jsonParser, function (req, res) {
   const method = req.body._method; // Create/Update
   const title = req.body.Title;
   const status = req.body.Status;
-  const userId = req.body.UserId;
+  const userId = req.body.UserId; 
   const x = req.body.X;
   const y = req.body.Y;
 
-  let seatId;
+  let seatId = req.body.SeatId || req.body._id;
 
   if (method === 'Create') {
     let seat = new Seat({
@@ -72,6 +72,25 @@ app.post('/seat', jsonParser, function (req, res) {
 
       res.status(200).send(seatId);
     });
+  }
+
+  if (method === 'Update') {
+    Seat.update({ _id:seatId}, 
+      {$set: 
+        {Title: title,
+          Status : status,
+          UserId : userId,
+          X : x, 
+          Y : y
+        }
+      },
+      function(err, data){
+        if (err) {
+          console.log(err);
+        } else {
+          res.status(200).send(data);
+        }
+      });
   }
 });
 

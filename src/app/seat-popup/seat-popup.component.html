@@ -5,9 +5,17 @@
 				<i class="fa fa-caret-down" aria-hidden="true"></i>
 			</div>
 		</div>
-		<div class="row"><p>Seat Title:</p><input type="text" ></div>
-		<div class="row"><p>Occupant:</p><input type="password" ></div>
+		<div class="row">
+			<p>Seat Title:</p>
+			<input type="text" *ngIf="titleEditing" [(ngModel)]="currentSeatTitle">
+			<a (click)="titleEdit(true)" *ngIf="!titleEditing">{{currentSeatTitle}}</a>
+		</div>
+		<div class="row">
+			<p>Occupant:</p>
+			<input type="text" *ngIf="userEditing" [(ngModel)]="currentSeatUser">
+			<a (click)="userEdit(true)" *ngIf="!userEditing">{{currentSeatUser}}</a>
+		</div>
 		<i class="fa fa-times cross" aria-hidden="true" (click)="exit()"></i>
 	</div>
-	<a class="popUpConfirm">SAVE</a>
+	<a class="popUpConfirm" (click)="save()" *ngIf="login">SAVE</a>
 </div>

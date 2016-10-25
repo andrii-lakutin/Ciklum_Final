@@ -30,6 +30,12 @@
 			width: 50%; 
 			margin-right: 40px; 
 		}
+		a{
+			width: 50%;
+			margin-right: 40px;
+			text-decoration: underline;
+			cursor: pointer;   
+		}
 	}
 	.row:nth-child(2){
 		margin-top: 30px; 

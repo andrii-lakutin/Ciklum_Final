@@ -1,6 +1,7 @@
 import { Injectable }    from '@angular/core';
 import { Headers, Http } from '@angular/http';
 import { Seat } from '../shared/seat';
+import { SeatPopUpService } from './seatPopUp.service';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -14,7 +15,7 @@ export class ServerService {
 
   private seatsDataSource = new Subject<any>();
 
-  constructor(private http: Http) {
+  constructor(private http: Http, private seatPopUpService: SeatPopUpService ) {
     this.seats = [];
   }
 
@@ -37,6 +38,7 @@ export class ServerService {
         seat.SeatId = res["_body"].slice(0, -1).slice(1);
         this.seats.push(seat);
         this.seatsDataSource.next(this.seats);
+        this.seatPopUpService.setCurrentSeat(seat);
       })
   }
 
@@ -48,6 +50,20 @@ export class ServerService {
         this.seats = arrOfSeats;
         this.seatsDataSource.next(this.seats);
       });
+  }
+
+  updateSeat(newTitle, newUser){
+    let seat = this.seatPopUpService.getCurrentSeat();
+    seat.Title = newTitle;
+    seat.UserId = newUser;
+    seat._method = 'Update';
+    console.log(seat);
+    this.post('seat', seat)
+      .then((res) => {
+        this.seatPopUpService.titleEdit(false);
+        this.seatPopUpService.userEdit(false);
+        this.getAllSeats();
+      })
   }
 
   post(path, data){

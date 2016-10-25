@@ -52,6 +52,7 @@ export class HeaderComponent implements OnInit {
   	this.inputName = '';
   	this.inputPass = '';
   	this.isLogin = true;
+    this.seatPopUpService.setLogin(true);
     this.ref.detectChanges();
   }
 
@@ -61,6 +62,7 @@ export class HeaderComponent implements OnInit {
 
   logout(){
   	this.isLogin = false;
+    this.seatPopUpService.setLogin(false);
     this.ref.detectChanges();
   }
 
