@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-
+import { Headers, Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 import {Observable} from "rxjs/Observable";
@@ -10,6 +10,7 @@ export class SeatPopUpService {
 
   currentSeat      : any;
   editing          : any;
+  currentUser      : any; 
   titleEditing     : boolean;
   userEditing      : boolean;
   login            : boolean;
@@ -18,20 +19,26 @@ export class SeatPopUpService {
   private visibilityDataSource = new Subject<boolean>();
   private currentSeatDataSource = new Subject<any>();
   private editingDataSource = new Subject<any>();
+  private occupantDataSource = new Subject<any>();
 
-  constructor() {
+  constructor(private http: Http) {
     this.currentSeat;
     this.login = false;
     this.editing = {
       titleEditing : false,
       userEditing  : false
     }
+    this.currentUser = {
+      Name: 'Free',
+      LastName: ''
+    };
   }
 
   // Observable stream
   visible$ = this.visibilityDataSource.asObservable();
   seat$ = this.currentSeatDataSource.asObservable();
   editing$ = this.editingDataSource.asObservable();
+  occupant$ = this.occupantDataSource.asObservable();
 
 
   changeVisibility(newState: boolean) {
@@ -49,8 +56,20 @@ export class SeatPopUpService {
       this.editingDataSource.next(this.editing);
     }
 
+    this.getCurrentUser(seat.UserId);
+
     this.currentSeat = seat;
     this.currentSeatDataSource.next(this.currentSeat);
+  }
+
+  getCurrentUser(fullName){
+    this.http.get(`http://localhost:3000/getCurrentUser=${fullName}`)
+      .toPromise()
+      .then(res => {
+        let user = JSON.parse(res["_body"]);
+        this.currentUser = user[0];
+        this.occupantDataSource.next(this.currentUser);
+      });
   }
 
   setLogin(newState: boolean){

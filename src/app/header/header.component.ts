@@ -40,8 +40,16 @@ export class HeaderComponent implements OnInit {
     this.ref.detach();
 
     this.serverService.users$.subscribe(
-      data => {
-        this.searchResult = data;
+      users => {
+        if(users.whoAsk === 'header' || users.whoAsk === 'any') {
+          if(this.withoutSeatCheckbox) {
+            this.searchResult = users.data.filter((item) => {
+              return item.SeatId === 'Free';
+            });
+          } else {
+            this.searchResult = users.data;
+          }
+        }
         this.ref.detectChanges();
       });
     this.ref.detectChanges();
@@ -91,8 +99,8 @@ export class HeaderComponent implements OnInit {
     this.ref.detectChanges();
   }
   //search
-  searchEvent(event: KeyboardEvent) {
-    this.search = (<HTMLInputElement>event.target).value;
+  searchEvent(event) {
+    this.search = event.target.value;
     if(this.search) {
       this.optimize();
     } else{
@@ -112,7 +120,7 @@ export class HeaderComponent implements OnInit {
   }
 
   goToServer(){
-    this.serverService.search(this.search);
+    this.serverService.search(this.search, 'header');
   }
 
   selectUser(user){
@@ -120,6 +128,23 @@ export class HeaderComponent implements OnInit {
     this.occupantPopUpService.changeVisibility(true);
     this.search = '';
     this.searchResult = [];
+    this.ref.detectChanges();
+  }
+
+  filterEvent(){
+    if(!this.withoutSeatCheckbox) {
+      this.searchResult = this.searchResult.filter((item) => {
+        return item.SeatId === 'Free';
+      });
+    } else {
+      let syntheticalEvent = {
+        target : {
+          value : this.search
+        }
+      }
+      this.searchEvent(syntheticalEvent);
+    }
+
     this.ref.detectChanges();
   }
 

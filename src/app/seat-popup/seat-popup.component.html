@@ -12,10 +12,14 @@
 		</div>
 		<div class="row">
 			<p>Occupant:</p>
-			<input type="text" *ngIf="userEditing" [(ngModel)]="currentSeatUser">
-			<a (click)="userEdit(true)" *ngIf="!userEditing">{{currentSeatUser}}</a>
+			<input type="text" *ngIf="userEditing" [(ngModel)]="search" (keyup)="searchEvent($event)">
+			<ul class="results">
+				<li *ngFor="let user of searchResult" (click)="selectUser(user)"><p>{{user.Name}}</p><p>{{user.LastName}}</p></li>
+			</ul>
+			<a (click)="openOccupant()" *ngIf="!userEditing">{{search}}</a>
+			<i class="fa fa-times cross" aria-hidden="true" (click)="userEdit(true)" *ngIf="!userEditing && login"></i>
 		</div>
 		<i class="fa fa-times cross" aria-hidden="true" (click)="exit()"></i>
 	</div>
-	<a class="popUpConfirm" (click)="save()" *ngIf="login">SAVE</a>
+	<a class="popUpConfirm" (click)="save(user)" *ngIf="login">SAVE</a>
 </div>

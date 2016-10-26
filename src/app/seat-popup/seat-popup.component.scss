@@ -1,6 +1,6 @@
 @import '../shared/popUpStyles.scss';
-
-.inputs{ 
+.PopUp{
+	.inputs{ 
 	.icon{
 		background: $popUp-icon-bg;
 		height: 40px;
@@ -22,19 +22,44 @@
 	}
 	.row{
 		display: flex;
-		justify-content: space-between;
 		color: $header-bg-color;
 		margin-top: 5px; 
 		input{
 			border: 1px solid $seat-item;
 			width: 50%; 
 			margin-right: 40px; 
+			margin-left: 10px; 
 		}
 		a{
-			width: 50%;
-			margin-right: 40px;
+			margin-left: 10px; 
 			text-decoration: underline;
 			cursor: pointer;   
+		}
+		i{
+			position: static;
+			background: none;
+		}
+		.results{
+			position: absolute;
+			width: 38%; 
+			top: 80px;
+			left: 203px; 
+			z-index: 1; 
+			li{
+				height: 15px;
+				color: black;
+				border: 1px solid $header-bg-color;
+				background: white;  
+				margin-top: 1px;
+				display: flex;
+				justify-content: flex-start;
+				line-height: 15px; 
+				cursor: pointer;
+				overflow: hidden;
+				p{
+					margin-left: 5px; 
+				}   
+			}
 		}
 	}
 	.row:nth-child(2){
@@ -43,4 +68,5 @@
 	.row:nth-child(3){
 		margin-top: 15px; 
 	}
+}
 }

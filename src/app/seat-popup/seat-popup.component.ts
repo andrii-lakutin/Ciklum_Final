@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { SeatPopUpService } from '../shared/seatPopUp.service';
 import { ServerService } from '../shared/server.service';
+import { OccupantPopUpService } from '../shared/occupantPopUp.service';
 
 @Component({
   selector: 'app-seat-popup',
@@ -10,8 +11,11 @@ import { ServerService } from '../shared/server.service';
 export class SeatPopupComponent implements OnInit {
 
   subscription     : any;
+  optimization     : any;
+  searchResult     : any;
+  currentUser      : any;
   currentSeatTitle : string;
-  currentSeatUser  : string;
+  search           : string;
   visible          : boolean;
   titleEditing     : boolean;
   userEditing      : boolean;
@@ -19,13 +23,16 @@ export class SeatPopupComponent implements OnInit {
 
   constructor(private seatPopUpService: SeatPopUpService,
               private serverService: ServerService,
+              private occupantPopUpService: OccupantPopUpService,
               private ref: ChangeDetectorRef) { 
     this.currentSeatTitle = "";
-    this.currentSeatUser = "";
   	this.visible = false;
     this.titleEditing = false;
     this.userEditing  = false;
     this.login = false;
+    this.search = '';
+    this.searchResult = [];
+    this.currentUser;
   }
 	
   ngOnInit() {
@@ -42,7 +49,7 @@ export class SeatPopupComponent implements OnInit {
     this.seatPopUpService.seat$.subscribe(
       data => {
         this.currentSeatTitle = data.Title; 
-        this.currentSeatUser = data.UserId; 
+        this.search = data.UserId; 
         this.ref.detectChanges();
       });
 
@@ -50,6 +57,20 @@ export class SeatPopupComponent implements OnInit {
       data => {
         this.titleEditing = data.titleEditing; 
         this.userEditing = data.userEditing; 
+        this.ref.detectChanges();
+      });
+
+    this.serverService.users$.subscribe(
+      users => {
+        if(users.whoAsk === 'seatPopUp' || users.whoAsk === 'any') {
+          this.searchResult = users.data;
+        }
+        this.ref.detectChanges();
+      });
+
+    this.seatPopUpService.occupant$.subscribe(
+      occupant => {
+        this.currentUser = occupant;
         this.ref.detectChanges();
       });
     this.ref.detectChanges();
@@ -67,6 +88,7 @@ export class SeatPopupComponent implements OnInit {
   }
 
   userEdit(newState: boolean){
+    this.currentUser = 'Free';
     let login = this.seatPopUpService.checkIsLogin();
     if(login) {
       this.seatPopUpService.userEdit(newState);
@@ -79,6 +101,70 @@ export class SeatPopupComponent implements OnInit {
   }
 
   save(){
-    this.serverService.updateSeat(this.currentSeatTitle, this.currentSeatUser);
+    if(this.currentUser) {
+      this.serverService.updateSeat(this.currentSeatTitle, this.currentUser);
+    } else{
+      //if user not chosen
+      let emptyUser = {
+        Name   : 'Free',
+        LastName: ''
+      }
+      this.serverService.updateSeat(this.currentSeatTitle, emptyUser);
+    }  
+  }
+
+  openOccupant(){
+    if(this.currentUser) {
+      this.occupantPopUpService.changeVisibility(true);
+      this.occupantPopUpService.setCurrent(this.currentUser);
+    }
+  }
+
+  //search
+  searchEvent(event: KeyboardEvent) {
+    this.search = (<HTMLInputElement>event.target).value;
+    if(this.search) {
+      this.optimize();
+    } else{
+      this.serverService.onEmptySearch();
+    }
+  }
+
+  optimize(){
+    if (this.optimization) {
+      // clear the timeout, if one is pending
+      clearTimeout(this.optimization);
+      this.optimization = null;
+    }
+
+    let trueContext = this.goToServer.bind(this);
+
+    this.optimization = setTimeout(trueContext, 300);
+  }
+
+  goToServer(){
+    this.serverService.search(this.search, 'seatPopUp');
+  }
+
+  selectUser(newUser){
+    if(newUser.SeatId === 'Free') {
+      this.selectUserConfirm(newUser);
+    } else {
+      if (confirm(`You really want to change seat for ${newUser.Name + newUser.LastName} ?
+        His previous seat will become empty!`)) {
+        this.selectUserConfirm(newUser);
+      }
+    }
+    this.ref.detectChanges();
+  }
+
+  selectUserConfirm(newUser){
+    let userId = newUser.Name + " " + newUser.LastName;
+    this.serverService.clearPreviousSeat(userId, newUser.SeatId);
+    this.serverService.seatUser(newUser._id, this.currentSeatTitle);
+    this.search = newUser.Name + ' ' + newUser.LastName;
+    this.currentUser = newUser;
+    this.currentUser.SeatId = this.currentSeatTitle;
+    this.searchResult = [];
   }
 }

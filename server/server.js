@@ -133,6 +133,57 @@ app.get('/search=:searchValue', function(req,res){
   });
 });
 
+app.get('/getCurrentUser=:fullName', function(req,res){
+  let fullName = req.params.fullName;
+  let data = fullName.split(' ');
+  PotentialOccupant.find({ $and: [ { Name: data[0] }, { LastName: data[1] } ] }).exec(function(err,data){
+      if (err) {
+        console.log(err);
+      } else {
+        res.status(200).send(data);
+      }
+  });
+});
+
+app.post('/seatUser', jsonParser, function(req,res){
+  const userId = req.body.userId;
+  const seatId = req.body.seatId;
+
+  PotentialOccupant.update({ _id:userId}, 
+    {$set: 
+      {
+        SeatId : seatId
+      }
+    },
+    function(err, data){
+      if (err) {
+        console.log(err);
+      } else {
+        res.status(200).send('Success!');
+      }
+    });
+});
+
+app.post('/clearSeat', jsonParser, function(req,res){
+  const userId = req.body.userId;
+  const seatId = req.body.seatId;
+
+  Seat.update({ UserId : userId}, 
+    {$set: 
+      {
+        UserId : 'Free',
+        Status : 'Free'
+      }
+    },
+    function(err, data){
+      if (err) {
+        console.log(err);
+      } else {
+        res.status(200).send('Success!');
+      }
+  });
+});
+
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
 });

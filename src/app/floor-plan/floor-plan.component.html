@@ -1,5 +1,6 @@
-<div class="floorPlan">
+<div class="floorPlan" (dragstart)="onDragStart($event, dragData)">
 	<img src="../../assets/images/19floor.svg" alt="FloorPlan">
 	<app-seat-items></app-seat-items>
 	<app-seat-popup></app-seat-popup>
 </div>
+ 

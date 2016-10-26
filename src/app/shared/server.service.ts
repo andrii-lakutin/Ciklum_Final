@@ -19,7 +19,10 @@ export class ServerService {
 
   constructor(private http: Http, private seatPopUpService: SeatPopUpService ) {
     this.seats = [];
-    this.users = [];
+    this.users = {
+      whoAsk: '',
+      data: []
+    };
   }
 
   seats$ = this.seatsDataSource.asObservable();
@@ -56,20 +59,15 @@ export class ServerService {
       });
   }
 
-  // getAllUsers(){
-  //   this.http.get(`http://localhost:3000/getAllUsers`)
-  //     .toPromise()
-  //     .then(res => {
-  //       let arrOfUsers = JSON.parse(res["_body"]);
-  //       this.users = arrOfUsers;
-  //       console.log(this.users);
-  //     });
-  // }
-
   updateSeat(newTitle, newUser){
     let seat = this.seatPopUpService.getCurrentSeat();
     seat.Title = newTitle;
-    seat.UserId = newUser;
+    seat.UserId = newUser.Name +' '+ newUser.LastName;
+    if(!newUser.LastName) {
+      seat.Status = 'Free'
+    } else {
+      seat.Status = 'Occupied'
+    }
     seat._method = 'Update';
     console.log(seat);
     this.post('seat', seat)
@@ -78,6 +76,24 @@ export class ServerService {
         this.seatPopUpService.userEdit(false);
         this.getAllSeats();
       })
+  }
+
+  seatUser(userId, seatId){
+    let data = {
+      userId: userId,
+      seatId: seatId
+    };
+
+    return this.post('seatUser', data)
+  }
+
+  clearPreviousSeat(userId, seatId){
+    let data = {
+      userId: userId,
+      seatId: seatId
+    };
+
+    return this.post('clearSeat', data)
   }
 
   post(path, data){
@@ -89,19 +105,23 @@ export class ServerService {
       .toPromise()
   }
 
-  search(searchValue){
+  search(searchValue, component){
     this.http.get(`http://localhost:3000/search=${searchValue}`)
       .toPromise()
       .then(res => {
         let arrOfUsers = JSON.parse(res["_body"]);
         console.log(arrOfUsers);
-        this.users = arrOfUsers;
+        this.users.whoAsk = component;
+        this.users.data = arrOfUsers;
         this.usersDataSource.next(this.users);
       });
   }
 
   onEmptySearch(){
-    let empty = [];
+    let empty = {
+      whoAsk : 'any',
+      data : []
+    }
     this.usersDataSource.next(empty);
   }
 

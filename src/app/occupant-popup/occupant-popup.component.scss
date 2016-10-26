@@ -1,25 +1,34 @@
 @import '../shared/popUpStyles.scss';
-
-.inputs{
-	.icon{
-		background: url(https://www.euruni.edu/blog/wp-content/uploads/2015/07/Jon-Snow-4.jpg) 50% 50%;
-		background-size: cover;
-		width: 80px;
-		height: 80px;
-		margin: 30px 25px;
-		float: left;
-	}
-	.row{
-		display: flex;
-		justify-content: flex-start;
-		flex-wrap: wrap;
-		color: $header-bg-color;
-		margin-top: 15px;
-		p:first-child{
-			flex: 0 1 120px;
+.PopUp{
+	.inputs{
+		.icon{
+			background: url(https://www.euruni.edu/blog/wp-content/uploads/2015/07/Jon-Snow-4.jpg) 50% 50%;
+			background-size: cover;
+			width: 80px;
+			height: 80px;
+			margin: 30px 25px;
+			float: left;
 		}
-	}
-	.row:nth-child(2){
-		margin-top: 30px; 
+		.row{
+			display: flex;
+			justify-content: flex-start;
+			flex-wrap: wrap;
+			color: $header-bg-color;
+			margin-top: 15px;
+			p:first-child{
+				flex: 0 1 120px;
+			}
+			a{
+				text-decoration: underline;
+				cursor: pointer;
+			}
+			i{
+				position: static;
+				background: none;
+			}
+		}
+		.row:nth-child(2){
+			margin-top: 30px; 
+		}
 	}
 }
