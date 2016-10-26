@@ -184,6 +184,31 @@ app.post('/clearSeat', jsonParser, function(req,res){
   });
 });
 
+app.post('/newSeatCoords', jsonParser, function(req,res){
+
+  console.log(req.body);
+
+  const seat = req.body.seat;
+  const X = req.body.X;
+  const Y = req.body.Y;
+
+  Seat.update({ _id : seat}, 
+    {$set: 
+      {
+        X : X,
+        Y : Y
+      }
+    },
+    function(err, data){
+      if (err) {
+        console.log(err);
+      } else {
+        res.status(200).send('Success!');
+      }
+  });
+});
+
+
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
 });

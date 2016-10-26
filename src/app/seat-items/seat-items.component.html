@@ -1,6 +1,6 @@
 <div class="seatItem" 
 	 *ngFor="let seat of seats" 
 	 [ngStyle]="{'top': seat.Y + 'px' , 'left' : seat.X + 'px'}"
-	 (click)="choose(seat)">
+	 (click)="choose(seat)" (mouseup)="test(seat)">
   <i class="fa fa-caret-down" aria-hidden="true"></i>
 </div>

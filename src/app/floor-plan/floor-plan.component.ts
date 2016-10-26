@@ -12,8 +12,4 @@ export class FloorPlanComponent implements OnInit {
   ngOnInit() {
   }
 
-  onDragStart(event, data: any) {
-  	console.log(event);
-  }
-
 }

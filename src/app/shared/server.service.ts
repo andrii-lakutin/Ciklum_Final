@@ -87,6 +87,15 @@ export class ServerService {
     return this.post('seatUser', data)
   }
 
+  setNewCoords(seat, newCoords){
+    let data = {
+      seat : seat._id,
+      X: newCoords.left,
+      Y: newCoords.top
+    };
+    return this.post('newSeatCoords', data)
+  }
+
   clearPreviousSeat(userId, seatId){
     let data = {
       userId: userId,

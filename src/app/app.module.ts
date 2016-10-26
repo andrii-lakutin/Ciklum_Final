@@ -26,7 +26,7 @@ import { OccupantPopupComponent } from './occupant-popup/occupant-popup.componen
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule 
   ],
   providers: [ServerService, SeatPopUpService, OccupantPopUpService],
   bootstrap: [AppComponent]
