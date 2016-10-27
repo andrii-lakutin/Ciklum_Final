@@ -1,4 +1,5 @@
 <div class="floorPlan">
+	<h1 *ngIf="selectionMode">SELECTION MODE<i class="fa fa-times cross" aria-hidden="true" (click)="selectionModeDisable()"></i></h1>
 	<img src="../../assets/images/19floor.svg" alt="FloorPlan">
 	<app-seat-items></app-seat-items>
 	<app-seat-popup></app-seat-popup>

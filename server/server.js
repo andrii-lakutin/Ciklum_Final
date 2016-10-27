@@ -145,6 +145,28 @@ app.get('/getCurrentUser=:fullName', function(req,res){
   });
 });
 
+app.get('/getCurrentSeat=:id', function(req,res){
+  let id = req.params.id;
+  Seat.find({ _id:id}).exec(function(err,data){
+      if (err) {
+        console.log(err);
+      } else {
+        res.status(200).send(data[0]);
+      }
+  });
+});
+
+app.get('/getCurrentSeatByTitle=:Title', function(req,res){
+  let Title = req.params.Title;
+  Seat.find({ Title:Title}).exec(function(err,data){
+      if (err) {
+        console.log(err);
+      } else {
+        res.status(200).send(data[0]);
+      }
+  });
+});
+
 app.post('/seatUser', jsonParser, function(req,res){
   const userId = req.body.userId;
   const seatId = req.body.seatId;

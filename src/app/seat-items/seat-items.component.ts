@@ -1,6 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef , ElementRef} from '@angular/core';
 import { ServerService } from '../shared/server.service';
 import { SeatPopUpService } from '../shared/seatPopUp.service';
+import { OccupantPopUpService } from '../shared/occupantPopUp.service';
+
 declare var jQuery:any;
 @Component({
   selector: 'app-seat-items',
@@ -11,13 +13,19 @@ export class SeatItemsComponent implements OnInit {
 
   seats: any;	
   dragOverSeat : any;
+  login: boolean;
+  selectionMode : boolean;
+  currentSeatId : string;
 
   constructor(private serverService: ServerService, 
   			      private seatPopUpService: SeatPopUpService, 
+              private occupantPopUpService: OccupantPopUpService,
   			      private ref: ChangeDetectorRef,
               private elementRef: ElementRef) { 
   	this.seats = [];
     this.dragOverSeat;
+    this.login = false;
+    this.selectionMode = false;
   }
 
   ngOnInit() {
@@ -25,8 +33,37 @@ export class SeatItemsComponent implements OnInit {
 
     this.serverService.seats$.subscribe(
       data => {
-        this.seats = data; 
-        this.makeNewSeatDraggable();
+        if(this.login) {
+          this.seats = data; 
+          this.makeSeatsDraggable();
+        } else {
+          //if data comes and this.login === false this means that it's first render
+          this.seats = data; 
+        }
+        this.ref.detectChanges();
+      });
+
+    this.seatPopUpService.login$.subscribe(
+      login => {
+        if(login) {
+          this.login = true;
+          this.makeSeatsDraggable();
+        } else {
+          this.login = false;
+          this.disableDrag();
+        }
+        this.ref.detectChanges();
+      });
+
+    this.occupantPopUpService.selectionMode$.subscribe(
+      data => {
+        this.selectionMode = data;
+        this.ref.detectChanges();
+      });
+
+    this.seatPopUpService.seat$.subscribe(
+      data => {
+        this.currentSeatId = data._id;
         this.ref.detectChanges();
       });
 
@@ -35,29 +72,28 @@ export class SeatItemsComponent implements OnInit {
   }
 
   ngAfterViewInit(){
-
-    let self = this;
-
-    this.makeNewSeatDraggable();
   }
 
   choose(seat){
-  	this.seatPopUpService.changeVisibility(true);
-  	this.seatPopUpService.setCurrentSeat(seat);
+    if(this.selectionMode) {
+      this.occupantPopUpService.chooseSeat(seat);
+    } else {
+      this.seatPopUpService.changeVisibility(true);
+      this.seatPopUpService.setCurrentSeat(seat);
+    }
   }
 
   setNewCoordinates(newCoord){
     this.serverService.setNewCoords(this.dragOverSeat,newCoord);
   }
 
-  test(seat){
+  update(seat){
     this.dragOverSeat = seat;
   }
 
-  makeNewSeatDraggable(){
+  makeSeatsDraggable(){
     let self = this;
-
-    setTimeout(() => {
+    setTimeout(()=>{
       jQuery(this.elementRef.nativeElement.children).draggable({
         start: function(event, ui) {
           //Prevent click at the end of draging
@@ -70,7 +106,24 @@ export class SeatItemsComponent implements OnInit {
         },
         containment : [180, 80, 1150, 580]
       });
+
+      jQuery(this.elementRef.nativeElement.children).draggable('enable');
     }, 300);
+    
   }
 
+  disableDrag(){
+    jQuery(this.elementRef.nativeElement.children).draggable('disable');
+  }
+
+  isHighlighted(seat){
+    return seat._id === this.currentSeatId;
+  }
+
+  setTitle(seat){
+    if(seat.Title === 'No Title') {
+      return '';
+    } else
+      return seat.Title;
+  }
 }

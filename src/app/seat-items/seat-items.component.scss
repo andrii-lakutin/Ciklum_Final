@@ -12,4 +12,31 @@
 	border-radius: 999px; 
 	font-size: 13px; 
 	cursor: pointer;
+	p{
+		text-align: center;
+		width: 100px;
+		margin-left: -40px;  
+	}
 } 
+
+.elForHighlight{
+	width: 22px;
+	height: 22px;
+	border-radius: 999px;
+	margin-top: -24px; 
+	margin-left: -2px;     
+}
+
+@keyframes anim {
+  from { transform: rotate( 0deg ); }
+  to   { transform: rotate( 360deg ); }
+}
+
+.highlight{
+	border: 2px dashed red;
+	// transition: all 500ms;
+    animation: anim 2.5s infinite linear;
+    i{
+    	animation: anim 2.5s infinite linear reverse;
+    }
+}

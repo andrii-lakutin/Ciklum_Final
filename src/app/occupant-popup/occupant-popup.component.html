@@ -1,6 +1,6 @@
 <div class="PopUp" *ngIf="visible">
 	<div class="inputs">
-		<div class="icon">
+		<div class="icon"> 
 		</div>
 		<div class="row">
 			<p>Occupant name:</p>
@@ -12,10 +12,10 @@
 		</div>
 		<div class="row">
 			<p>Occupant seat:</p>
-			<a>{{seatId}}</a>
-			<i class="fa fa-times cross" aria-hidden="true"></i>
+			<a (click)="selectSeat()">{{seatId}}</a>
+			<i class="fa fa-times cross" aria-hidden="true" (click)="selectionModeEnable()" *ngIf="login"></i>
 		</div>
 		<i class="fa fa-times cross" aria-hidden="true" (click)="exit()"></i>
 	</div>
-	<a class="popUpConfirm" >SAVE</a>
+	<a class="popUpConfirm" *ngIf="login" (click)="saveChanges()">SAVE</a>
 </div>

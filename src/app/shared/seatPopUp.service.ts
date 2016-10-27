@@ -13,10 +13,11 @@ export class SeatPopUpService {
   currentUser      : any; 
   titleEditing     : boolean;
   userEditing      : boolean;
-  login            : boolean;
+  login            : boolean; 
 
   // Observable source
   private visibilityDataSource = new Subject<boolean>();
+  private loginDataSource = new Subject<boolean>();
   private currentSeatDataSource = new Subject<any>();
   private editingDataSource = new Subject<any>();
   private occupantDataSource = new Subject<any>();
@@ -36,6 +37,7 @@ export class SeatPopUpService {
 
   // Observable stream
   visible$ = this.visibilityDataSource.asObservable();
+  login$ = this.loginDataSource.asObservable();
   seat$ = this.currentSeatDataSource.asObservable();
   editing$ = this.editingDataSource.asObservable();
   occupant$ = this.occupantDataSource.asObservable();
@@ -74,6 +76,7 @@ export class SeatPopUpService {
 
   setLogin(newState: boolean){
     this.login = newState;
+    this.loginDataSource.next(this.login);
   }
 
   checkIsLogin(){

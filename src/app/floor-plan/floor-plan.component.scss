@@ -4,9 +4,28 @@
 	width: 1000px; 
 	height: 541px; 
 	position: relative;
+	h1{
+		position: absolute;
+		left: 350px;
+		top: -32px;
+		font-size: 30px;
+		i{
+			cursor: pointer;
+			margin-left: 5px; 
+		}  
+	}
 	img{
 		position: absolute;
 		width: 100%; 
 		height: auto; 
+		user-drag: none; 
+		user-select: none;
+		-moz-user-select: none;
+		-webkit-user-drag: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+		&::selection{
+			background: none; 
+		}
 	}
 }

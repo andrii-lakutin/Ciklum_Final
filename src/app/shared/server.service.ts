@@ -2,6 +2,7 @@ import { Injectable }    from '@angular/core';
 import { Headers, Http } from '@angular/http';
 import { Seat } from '../shared/seat';
 import { SeatPopUpService } from './seatPopUp.service';
+import { OccupantPopUpService } from './occupantPopUp.service';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -17,7 +18,9 @@ export class ServerService {
   private seatsDataSource = new Subject<any>();
   private usersDataSource = new Subject<any>();
 
-  constructor(private http: Http, private seatPopUpService: SeatPopUpService ) {
+  constructor(private http: Http,
+   private seatPopUpService: SeatPopUpService,
+   private occupantPopUpService: OccupantPopUpService ) {
     this.seats = [];
     this.users = {
       whoAsk: '',
@@ -50,17 +53,17 @@ export class ServerService {
   }
 
   getAllSeats(){
-    this.http.get(`http://localhost:3000/getAllSeats`)
+    return this.http.get(`http://localhost:3000/getAllSeats`)
       .toPromise()
       .then(res => {
         let arrOfSeats = JSON.parse(res["_body"]);
         this.seats = arrOfSeats;
         this.seatsDataSource.next(this.seats);
-      });
+      })
   }
 
-  updateSeat(newTitle, newUser){
-    let seat = this.seatPopUpService.getCurrentSeat();
+  updateSeat(newTitle, newUser, exactSeat?){
+    let seat = exactSeat || this.seatPopUpService.getCurrentSeat();
     seat.Title = newTitle;
     seat.UserId = newUser.Name +' '+ newUser.LastName;
     if(!newUser.LastName) {
@@ -69,7 +72,7 @@ export class ServerService {
       seat.Status = 'Occupied'
     }
     seat._method = 'Update';
-    console.log(seat);
+
     this.post('seat', seat)
       .then((res) => {
         this.seatPopUpService.titleEdit(false);
@@ -78,13 +81,28 @@ export class ServerService {
       })
   }
 
-  seatUser(userId, seatId){
+  seatUser(userId, seatTitle, seat?){
     let data = {
       userId: userId,
-      seatId: seatId
+      seatId: seatTitle
     };
 
     return this.post('seatUser', data)
+    .then((res)=>{
+      if(seat) {
+        this.occupantPopUpService.chooseSeat(seat);
+      }
+    })
+  }
+
+  getCurrentUser(fullName){
+    return this.http.get(`http://localhost:3000/getCurrentUser=${fullName}`)
+      .toPromise()
+  }
+
+  getCurrentSeat(Id){
+    return this.http.get(`http://localhost:3000/getCurrentSeat=${Id}`)
+      .toPromise()
   }
 
   setNewCoords(seat, newCoords){
@@ -94,6 +112,9 @@ export class ServerService {
       Y: newCoords.top
     };
     return this.post('newSeatCoords', data)
+    .then((res) => {
+        this.getAllSeats();
+      })
   }
 
   clearPreviousSeat(userId, seatId){
@@ -124,6 +145,11 @@ export class ServerService {
         this.users.data = arrOfUsers;
         this.usersDataSource.next(this.users);
       });
+  }
+
+  getCurrentSeatByTitle(Title){
+    return this.http.get(`http://localhost:3000/getCurrentSeatByTitle=${Title}`)
+      .toPromise()
   }
 
   onEmptySearch(){

@@ -1,6 +1,10 @@
 <div class="seatItem" 
 	 *ngFor="let seat of seats" 
 	 [ngStyle]="{'top': seat.Y + 'px' , 'left' : seat.X + 'px'}"
-	 (click)="choose(seat)" (mouseup)="test(seat)">
+	 (click)="choose(seat)" 
+	 (mouseup)="update(seat)">
   <i class="fa fa-caret-down" aria-hidden="true"></i>
+  <div class="elForHighlight" [ngClass]="{'highlight' : isHighlighted(seat)}"></div>
+  <p>{{setTitle(seat)}}</p>
 </div>
+
