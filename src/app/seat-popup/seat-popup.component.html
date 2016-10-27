@@ -21,5 +21,6 @@
 		</div>
 		<i class="fa fa-times cross" aria-hidden="true" (click)="exit()"></i>
 	</div>
-	<a class="popUpConfirm" (click)="save(user)" *ngIf="login">SAVE</a>
+	<a class="popUpConfirm delete" *ngIf="login" (click)="delete()">DELETE</a>
+	<a class="popUpConfirm save" (click)="save(user)" *ngIf="login">SAVE</a>
 </div>

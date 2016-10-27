@@ -58,6 +58,7 @@ export class ServerService {
       .then(res => {
         let arrOfSeats = JSON.parse(res["_body"]);
         this.seats = arrOfSeats;
+        console.log(arrOfSeats);
         this.seatsDataSource.next(this.seats);
       })
   }
@@ -77,6 +78,17 @@ export class ServerService {
       .then((res) => {
         this.seatPopUpService.titleEdit(false);
         this.seatPopUpService.userEdit(false);
+        this.getAllSeats();
+      })
+  }
+
+  deleteSeat(id){
+    let data = {
+      id: id
+    };
+
+    return this.post('deleteSeat', data)
+      .then((res)=>{
         this.getAllSeats();
       })
   }

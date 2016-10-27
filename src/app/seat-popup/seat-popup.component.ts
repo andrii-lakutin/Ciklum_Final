@@ -116,9 +116,23 @@ export class SeatPopupComponent implements OnInit {
     this.ref.detectChanges();
   }
 
+  delete(){
+    let id = this.currentSeat.SeatId || this.currentSeat._id;
+    if(confirm('Delete?')) {
+      if(this.currentUser) {
+        this.serverService.deleteSeat(id);
+        this.seatPopUpService.changeVisibility(false);
+        this.serverService.seatUser(this.currentUser._id, 'Free');
+      } else {
+        this.serverService.deleteSeat(id);
+        this.seatPopUpService.changeVisibility(false);
+      }
+    }  
+  }
+
   save(){
-    this.serverService.getCurrentSeat(this.currentSeat._id).then((res)=>{
-      console.log(JSON.parse(res["_body"]));
+    let id = this.currentSeat.SeatId || this.currentSeat._id;
+    this.serverService.getCurrentSeat(id).then((res)=>{
       let seat = JSON.parse(res["_body"]);
       if(this.currentUser) {
         this.serverService.updateSeat(this.currentSeatTitle, this.currentUser, seat);

@@ -230,6 +230,18 @@ app.post('/newSeatCoords', jsonParser, function(req,res){
   });
 });
 
+app.post('/deleteSeat', jsonParser, function(req,res){
+  const id = req.body.id;
+  console.log(id);
+  Seat.remove({ _id : id }, function(err,removed) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.status(200).send('Deleted!');
+    }
+  });
+});
+
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');

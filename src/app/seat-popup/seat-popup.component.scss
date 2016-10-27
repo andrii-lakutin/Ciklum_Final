@@ -33,7 +33,7 @@
 		a{
 			margin-left: 10px; 
 			text-decoration: underline;
-			cursor: pointer;   
+			cursor: pointer; 
 		}
 		i{
 			position: static;
@@ -68,5 +68,12 @@
 	.row:nth-child(3){
 		margin-top: 15px; 
 	}
+	}
+	.delete{
+		align-self: flex-start;
+		margin-left: 10px;
+		margin-bottom: -16px;  
+	}
 }
-}
+
+
