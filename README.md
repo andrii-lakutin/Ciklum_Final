@@ -3,7 +3,7 @@
 https://ciklum-final.herokuapp.com/ - app <br>
 
 
-If you wanna open it locally(server & client are separated, so you will need to open 2 terminals): 
+If you wanna open it locally(server & client are separated, so you will need to open 2 terminals): <br>
 1.clone <br>
 1.npm i <br>
 2.Run Server - npm run server (In first terminal)<br>
